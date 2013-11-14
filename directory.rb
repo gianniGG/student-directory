@@ -1,67 +1,43 @@
-# Hello. Here is my way of getting the directory into Ruby.
-print "Hello, and welcome to my code :D
-
-"
+# Create a student directory for Makers Academy Cohort
+# Greetings
+puts "\n***** Hello stranger, and welcome to my code my directory :D*****"
+# 1st Method to get the Student input 
 def input_students 
-# First of all, we are creating a blank array for the Students we are adding to our directory
-	#print_names_cohort(name, cohort)
-	print "\n"
-	@students = []
-	while true
-		print "Would you like to enter a student in the directory? [y/n]: "
+	@students = [] # This is a global method to be used everywhere in the Script by the way
+	while true # Creating a loop in style
+		print "\nWanna add a student to the directory? [y/n]: " #Activates Yes or No command
 		if gets.chomp.strip.downcase == "y"
-			print "Student Name or Nickname: "
-			name = gets.chomp
-			print "What about the cohort?"
-			cohort =gets.chomp
-			@students << {name: name, cohort: cohort}
-			print "\n\n"
-			print_names_cohort(@students)
+			print "Student name: " 
+			name = gets.chomp.capitalize #Enter the name
+			print "What about the cohort? "
+			cohort =gets.chomp.capitalize #Enter cohort
+			@students << {name: name, cohort: cohort} #Hash where all the data goes back to my array
 		else
 			break
 		end
 	end
 end
-
-
-
-# 	print "First, can you please enter the names of the students/nAnd when you're done editing, just hit return twice.. Thanks"
-# 	# create an empty array	
-# 	students = []
-# 	# get the first name and the cohort
-# 	name = gets.chomp
-# 	cohort = gets.chomp
-# 	# while the name is not empty, repeat this code
-# 	while !name.empty? do
-# 		# add the student hash to the array
-# 		students << { :name => name, :cohort => :november}
-# 		puts "Now we have #{students.length} students"
-# 		#get another name from the user
-# 		name = gets.chomp
-# 	end
-# 	#return the array of students
-# 	students
-# end
-
+# Now my code is written, I define methods to print the directory outcome
+# First, the header
 def print_header
-  puts "The students of my cohort at Makers Academy"
+  puts "\nThanks to your input, here is the cohort list @ Makers Academy"
   puts "-------------"
 end
-
+# Then the list of names I received in the input method
 def print_names_cohort(students)
-  students.each_with_index do |student|
-    puts "#{@students[:name]} (#{@students[:cohort]})"
+  students.each do |student|
+    puts "#{student[:name]}, #{student[:cohort]}" ##{i+1}: when using each_with_index (  # puts "#{@students[i]}" #equivalent)
   end
 end
-
+# Finally the last part 
 def print_footer(students)
-	# puts students.class
-  puts "Overall, we have #{@students.length} great students"
+  puts "-------------"
+  puts "All and all, we have #{@students.length} courageous and amazing students"
 end
-
-# nothing happens until we call the methods
+# Now , I am calling everything so that it appears nice and clean in Ruby
 
 students = input_students
 print_header
-print(students)
+print_names_cohort(@students)
 print_footer(students)
+
