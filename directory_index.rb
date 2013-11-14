@@ -27,8 +27,8 @@ def print_header
 end
 # Then the list of names I received in the input method
 def print_names_cohort(students)
-  students.each do |student|
-    puts "#{student[:name]}, #{student[:cohort]}" ##{i+1}: when using each_with_index (  # puts "#{@students[i]}" #equivalent)
+  students.each_with_index do |student, i| # with the each_with_index, you need to define student THEN index -> "i"
+    puts "#{i+1}. #{student[:name]}, #{student[:cohort]}" ##{i+1}: when using each_with_index (# puts "#{@students[i]}" #equivalent)
   end
 end
 # Finally the last part 
