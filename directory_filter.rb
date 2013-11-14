@@ -35,7 +35,7 @@ end
 # Finally the last part 
 def print_footer(students)
   puts "-------------"
-  puts "All and all, we have #{@students.length} courageous and amazing students"
+  puts "Here is the list of students we have filtered with the letter A"
 end
 # Now , I am calling everything so that it appears nice and clean in Ruby
 
