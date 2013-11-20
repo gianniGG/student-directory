@@ -1,8 +1,6 @@
-# Create a student directory for Makers Academy Cohort
+# Makers Academy Student Directory
 # Introduction (because I am a polite guy)
 puts "\n***** Hello stranger, and welcome to my code my student directory :D*****"
-
-@students = [] # an empty array accessible to all methods
 
 def menu
 	students= []
@@ -11,11 +9,12 @@ def menu
 	process(gets.chomp, students)
     end
 end
-	# @students = [] # This is a global method to be used everywhere in the Script
+
 def print_menu # 1. print the menu and ask the user what to do
 	puts "\n1. Input the students"
 	puts "2. Show the students"
 	puts "3. Save the students to students.csv"
+	puts "4. Load names from students.csv"
 	puts "9. Exit"
 end
 
@@ -48,6 +47,8 @@ def process(selection, students)
     exit 
 	when "3" # save the student list to a csv file
 	save_students(students)
+when "4"
+	load_students(students) #load the students' list
     else
     puts " \nHmm... I am not sure what you meant, please try again"
     end
@@ -79,7 +80,15 @@ def save_students(students) #open the file for writing
 	end
 	file.close
 end
+def load_students(students)
+	file = File.open("students.csv", "r")
+	file.readlines.each do |line|
+		name, cohort = line.chomp.split(',')
+		students << {name: name, cohort: cohort.to_sym}
+	end
+	file.close
 
+end
 
 # # Now , I am calling everything so that it appears nice and clean in Ruby
  menu
