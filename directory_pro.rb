@@ -1,98 +1,100 @@
 # Makers Academy Student Directory
-# Introduction (because I am a polite guy)
 puts "\n***** Hello stranger, and welcome to my code my student directory :D*****"
+	@students = [] #Global array 
 
-def menu
-	students= []
-	loop do
-	print_menu
-	process(gets.chomp, students)
-    end
-end
-
-def print_menu # 1. print the menu and ask the user what to do
+#1. Show the menus and all admin methods
+def show_menu # 1. print the menu and ask the user what to do
 	puts "\n1. Input the students"
-	puts "2. Show the students"
-	puts "3. Save the students to students.csv"
-	puts "4. Load names from students.csv"
+	puts "2. Show the students\n3. Save list to students.csv\n4. Load list from students.csv"
 	puts "9. Exit"
 end
-
-def input_students(students) 
-		print "\nWanna add a student to the directory? [y/n]: " # Yes or No command
-	if gets.chomp.strip.downcase == "y"
-		print "Student name: " 
-		name = gets.chomp.capitalize #Enter the name
-		print "What about the cohort? "
-		cohort = gets.chomp.capitalize #Enter cohort
-		students << {name: name, cohort: cohort} #Hash all back to my array
-	else
-    end
-    students
+def display(students)
+  header
+  details(@students)
+  footer(students)
+end
+def header #header 
+   puts "\nThanks to your input, here is the cohort list @ Makers Academy"
+   puts "-------------"
+end
+def details(students) # Then the list of names I received in the input method
+   students.each do |student|
+     puts "#{student[:name]}, #{student[:cohort]}" 
+   end
+end
+def footer(students) # Finally the last part 
+   puts "--\nAll and all, we have #{students.length} courageous and amazing students"
 end
 
-def show_students(students)
-  print_header
-  print_names_cohort(students)
-  print_footer(students)
+#2. Process the user inputs	
+def menu
+	try_load if ARGV.count == 1
+	loop do
+		show_menu
+		process(STDIN.gets.chomp, @students)
+    end
+end
+def input(students) 
+		name = prompt "Student name: " 
+		cohort = prompt "What about the cohort? "
+		#later, add a {y,n} method to ask for more user inputs..
+		@students << {name: name, cohort: cohort} #Hash all back to my array
+end
+
+def prompt(message)
+	print message
+	STDIN.gets.chomp.capitalize
 end
 
 def process(selection, students)
     case selection
     when "1" # input the students 
-  	students = input_students(students)
+  	students = input(students)
     when "2" # show the students
-    show_students students
+    display(students)
     when "9" # this will cause the program to terminate
     exit 
 	when "3" # save the student list to a csv file
-	save_students(students)
-when "4"
-	load_students(students) #load the students' list
+	save_file(students)
+	when "4"
+	try_load #load the students' list
     else
     puts " \nHmm... I am not sure what you meant, please try again"
     end
 end
 
-def print_header #Header 
-   puts "\nThanks to your input, here is the cohort list @ Makers Academy"
-   puts "-------------"
-end
- 
-def print_names_cohort(students) # Then the list of names I received in the input method
-   students.each do |student|
-     puts "#{student[:name]}, #{student[:cohort]}" 
-   end
-end
-
-def print_footer(students) # Finally the last part 
-   puts "-------------"
-   puts "All and all, we have #{students.length} courageous and amazing students"
-end
-
-def save_students(students) #open the file for writing
+#3. Save and Load external files
+def save_file(students) #open the file for writing
 	puts students
-	file = File.open("students.csv", "w")
-	students.each do |student|
-		student_data = [student[:name], student[:cohort]]
-		csv_line = student_data.join(",")
-		file.puts csv_line
+	File.open("students.csv", "w") do |file|
+		students.each do |student|
+			student_data = [student[:name], student[:cohort]]
+			csv_line = student_data.join(",")
+			file.puts csv_line
+		end
 	end
-	file.close
 end
-def load_students(students)
-	file = File.open("students.csv", "r")
-	file.readlines.each do |line|
-		name, cohort = line.chomp.split(',')
-		students << {name: name, cohort: cohort.to_sym}
+def try_load
+	filename = ARGV.first || "students.csv"
+	if File.exist?(filename)
+		load(filename)
+		puts "Loaded #{@students.length} from #{filename}"
+	else
+		puts "Sorry mate, #{filename} doesn't exist."
 	end
-	file.close
-
+end
+def load(filename)
+	File.open(filename, "r") do |file|
+		file.readlines.each do |line|
+			name, cohort = line.chomp.split(',')
+			@students << {name: name, cohort: cohort.to_sym}
+		end
+	end
 end
 
 # # Now , I am calling everything so that it appears nice and clean in Ruby
  menu
- students = input_students
- print_header
- print_names_cohort(students)
- print_footer(students)
+ students = input
+ header
+ details(students)
+ footer(students)
